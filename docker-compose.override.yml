@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  productmicroservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:8081;http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=ProductDb;User ID=sa;Password=YourStrongPassword!;Encrypt=True;TrustServerCertificate=true;
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+      SA_PASSWORD: "YourStrongPassword!" 
+    ports:
+      - "1433:1433"
